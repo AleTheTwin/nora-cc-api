@@ -70,7 +70,8 @@ docker run -it --rm -w /app -v $(pwd):/app node:16 npm i
 printf "${reset}\n"
 printf "${cyan}Compilando proyecto...\n"
 
-npm run build
+docker run -it --rm -w /app -v $(pwd):/app node:16 npm run build
+
 
 printf "${reset}\n"
 printf "${cyan}Creando base de datos..."

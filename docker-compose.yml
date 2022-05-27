@@ -11,6 +11,8 @@ services:
             - MARIADB_DATABASE=mydb
         volumes:
             - ./db:/var/lib/mysql/
+        ports:
+            - 3306:3306
     api:
         image: node:16
         volumes:
