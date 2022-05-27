@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  nombre             String
+  password           String
+  matricula          String        @id
+  carrera            Carrera
+  rol                Rol
+  materiasCursando   Materia[]     @relation(name: "cursa")
+  materiasImpartidas Materia[]     @relation("imparte")
+  prestamos          Solicitud[]   @relation(name: "Solicita")
+  observacion        Observacion[]
+}
+
+model Materia {
+  nrc         String      @id @default(uuid())
+  nombre      String      @unique
+  solicitudes Solicitud[]
+  alumnos     Usuario[]   @relation(name: "cursa")
+  profesor    Usuario     @relation(name: "imparte", fields: [profesorId], references: [matricula], onDelete: Cascade, onUpdate: Cascade)
+  profesorId  String
+}
+
+model Solicitud {
+  id            String   @id @default(uuid())
+  materia       Materia  @relation(fields: [materiaNRC], references: [nrc], onDelete: Cascade, onUpdate: Cascade)
+  materiaNRC    String
+  horaSalida    DateTime
+  horaEntrada   DateTime
+  creadoEn      DateTime
+  objetivo      String
+  solicitante   Usuario  @relation(name: "Solicita", fields: [solicitanteId], references: [matricula], onDelete: Cascade, onUpdate: Cascade)
+  solicitanteId String
+}
+
+model Equipo {
+  nombre           String
+  descripcion      String
+  numeroInventario String        @id @default(uuid())
+  observaciones    Observacion[]
+  disponibleHasta  DateTime      @default(now())
+}
+
+model Observacion {
+  id        String  @id @default(uuid())
+  autor     Usuario @relation(fields: [autorId], references: [matricula], onDelete: Cascade, onUpdate: Cascade)
+  autorIp   String
+  autorId   String
+  contenido String  @unique
+  equipo    Equipo  @relation(fields: [equipoId], references: [numeroInventario], onDelete: Cascade, onUpdate: Cascade)
+  equipoId  String
+}
+
+enum Rol {
+  alumno
+  profesor
+  administrador
+}
+
+enum Carrera {
+  LTC
+  LIS
+  LE
+  LRySC
+}
+
+model token {
+  id       String  @unique
+  isActive Boolean @default(false)
+}
