@@ -10,11 +10,13 @@ import routerEquipos from "./routers/routerEquipos";
 import routerMaterias from "./routers/routerMaterias";
 import routerObservaciones from "./routers/routerObservaciones";
 import routerSolicitudes from "./routers/routerSolicitudes";
+const cors = require("cors")
 
 const app: Express = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
+app.use(cors())
 
 app.use("/api/v1/usuarios/", routerUsuarios);
 app.use("/api/v1/equipos/", routerEquipos);
