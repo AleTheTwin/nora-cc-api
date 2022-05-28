@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import handleError from "../handle-errors";
 
 const prisma = new PrismaClient();
-const apyKey = process.env.API_KEY || "akljfhaksdfhkasjdfhkasfkj";
+const apyKey = process.env.API_KEY ;
 
 export default async function validarAccesoAdministrador(
     req: Request,
@@ -20,6 +20,7 @@ export default async function validarAccesoAdministrador(
     }
 
     let token = req.headers.authorization.split(" ")[1];
+    
     try {
         var payload = jwt.decode(token, apyKey);
     } catch (error) {

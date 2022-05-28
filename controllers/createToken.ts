@@ -2,9 +2,10 @@ import { Usuario } from "@prisma/client";
 
 const jwt = require("jwt-simple");
 const moment = require("moment");
-const apiKey = process.env.API_KEY || "akljfhaksdfhkasjdfhkasfkj";
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+
+const apiKey = process.env.API_KEY ;
 
 export default function createToken(usuario: Usuario): Promise<string> {
     var payload = {

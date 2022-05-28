@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import handleError from "../handle-errors";
 
 const prisma = new PrismaClient();
-const apyKey = process.env.API_KEY || "akljfhaksdfhkasjdfhkasfkj";
+const apyKey = process.env.API_KEY ;
 
 export default async function validarAcceso (req: Request, res: Response, next: Function) {
     if (!req.headers.authorization) {
