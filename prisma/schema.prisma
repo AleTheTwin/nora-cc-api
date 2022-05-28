@@ -11,11 +11,11 @@ datasource db {
 }
 
 model Usuario {
-  nombre             String
-  password           String
-  matricula          String        @id
-  carrera            Carrera
-  rol                Rol
+  nombre             String // Se manda
+  password           String // Se manda
+  matricula          String        @id // Se manda
+  carrera            Carrera // Se manda
+  rol                Rol // Se manda
   materiasCursando   Materia[]     @relation(name: "cursa")
   materiasImpartidas Materia[]     @relation("imparte")
   prestamos          Solicitud[]   @relation(name: "Solicita")
@@ -24,28 +24,28 @@ model Usuario {
 
 model Materia {
   nrc         String      @id @default(uuid())
-  nombre      String      @unique
+  nombre      String      @unique // Se manda
   solicitudes Solicitud[]
   alumnos     Usuario[]   @relation(name: "cursa")
   profesor    Usuario     @relation(name: "imparte", fields: [profesorId], references: [matricula], onDelete: Cascade, onUpdate: Cascade)
-  profesorId  String
+  profesorId  String // Se manda
 }
 
 model Solicitud {
   id            String   @id @default(uuid())
   materia       Materia  @relation(fields: [materiaNRC], references: [nrc], onDelete: Cascade, onUpdate: Cascade)
-  materiaNRC    String
-  horaSalida    DateTime
-  horaEntrada   DateTime
+  materiaNRC    String // Se manda
+  horaSalida    DateTime // Se manda
+  horaEntrada   DateTime // Se manda
   creadoEn      DateTime
-  objetivo      String
+  objetivo      String // Se manda
   solicitante   Usuario  @relation(name: "Solicita", fields: [solicitanteId], references: [matricula], onDelete: Cascade, onUpdate: Cascade)
   solicitanteId String
 }
 
 model Equipo {
-  nombre           String
-  descripcion      String
+  nombre           String // Se manda
+  descripcion      String // Se manda
   numeroInventario String        @id @default(uuid())
   observaciones    Observacion[]
   disponibleHasta  DateTime      @default(now())
@@ -56,7 +56,7 @@ model Observacion {
   autor     Usuario @relation(fields: [autorId], references: [matricula], onDelete: Cascade, onUpdate: Cascade)
   autorIp   String
   autorId   String
-  contenido String  @unique
+  contenido String  @unique // Se manda
   equipo    Equipo  @relation(fields: [equipoId], references: [numeroInventario], onDelete: Cascade, onUpdate: Cascade)
   equipoId  String
 }
