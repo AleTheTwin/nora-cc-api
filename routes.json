@@ -1,0 +1,73 @@
+[
+    {
+        "path": "/api/v1/usuarios",
+        "methods": ["GET", "POST"],
+        "middlewares": ["validarAccesoAdministrador", "anonymous"]
+    },
+    {
+        "path": "/api/v1/usuarios/:matricula/",
+        "methods": ["GET", "DELETE", "PUT"],
+        "middlewares": ["validarAcceso", "anonymous"]
+    },
+    {
+        "path": "/api/v1/equipos",
+        "methods": ["GET", "POST"],
+        "middlewares": ["anonymous"]
+    },
+    {
+        "path": "/api/v1/equipos/:numeroInventario/",
+        "methods": ["GET", "DELETE", "PUT"],
+        "middlewares": ["anonymous"]
+    },
+    {
+        "path": "/api/v1/equipos/:numeroInventario/observaciones/",
+        "methods": ["GET", "POST"],
+        "middlewares": ["validarAcceso", "anonymous"]
+    },
+    {
+        "path": "/api/v1/observaciones/",
+        "methods": ["GET"],
+        "middlewares": ["validarAccesoAdministrador", "anonymous"]
+    },
+    {
+        "path": "/api/v1/observaciones/:id/",
+        "methods": ["GET"],
+        "middlewares": ["anonymous"]
+    },
+    {
+        "path": "/api/v1observaciones/:id",
+        "methods": ["DELETE"],
+        "middlewares": ["validarAccesoAdministrador", "anonymous"]
+    },
+    {
+        "path": "/api/v1/observaciones/:id",
+        "methods": ["PUT"],
+        "middlewares": ["validarAccesoAdministrador", "anonymous"]
+    },
+    {
+        "path": "/api/v1/solicitudes/:id/",
+        "methods": ["GET"],
+        "middlewares": ["validarAccesoProfesor", "anonymous"]
+    },
+    {
+        "path": "/api/v1/solicitudes/",
+        "methods": ["GET", "POST"],
+        "middlewares": ["validarAccesoProfesor", "anonymous"]
+    },
+    {
+        "path": "/api/v1/materias",
+        "methods": ["GET", "POST"],
+        "middlewares": ["validarAccesoAdministrador", "anonymous"]
+    },
+    {
+        "path": "/api/v1/materias/:nrc/",
+        "methods": ["GET", "DELETE", "PUT"],
+        "middlewares": ["anonymous"]
+    },
+    {
+        "path": "/api/v1/login/",
+        "methods": ["POST"],
+        "middlewares": ["anonymous"]
+    },
+    { "path": "/", "methods": ["GET"], "middlewares": ["anonymous"] }
+]
