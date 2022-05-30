@@ -139,7 +139,7 @@ routerObservaciones.post(
 );
 
 routerObservaciones.delete(
-    "observaciones/:id",
+    "/observaciones/:id",
     validarAccesoAdministrador,
     async (req: Request, res: Response) => {
         const { id } = req.params;
