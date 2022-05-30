@@ -28,10 +28,14 @@ routerObservaciones.get(
                         equipoId: numeroInventario,
                     },
                 });
-            const hizoComentario: Boolean =
-                observaciones.find((observacion) => {
-                    observacion.autorId == usuario.matricula;
-                }) != undefined;
+            const observaciones2: Observacion[] =
+                await prisma.observacion.findMany({
+                    where: {
+                        equipoId: numeroInventario,
+                        autorId: usuario.matricula,
+                    },
+                });
+            const hizoComentario = observaciones2.length > 0;
 
             if (!hizoComentario) {
                 res.status(401).send({
@@ -95,8 +99,10 @@ routerObservaciones.post(
         const nuevaObservacion: Observacion = req.body;
         const usuario: Usuario = req.usuario;
         const { numeroInventario } = req.params;
-        const ip = (req.headers["x-forwarded-for"]?.toString() || req.socket.remoteAddress!);
-        
+        const ip =
+            req.headers["x-forwarded-for"]?.toString() ||
+            req.socket.remoteAddress!;
+
         if (!nuevaObservacion.contenido) {
             res.status(500).json({
                 error: "El campo nombre no puede estar vacío.",
@@ -104,7 +110,7 @@ routerObservaciones.post(
             });
             return;
         }
-        
+
         if (nuevaObservacion.contenido == "") {
             res.status(500).json({
                 error: "El campo nombre no puede estar vacío.",
@@ -112,7 +118,7 @@ routerObservaciones.post(
             });
             return;
         }
-        
+
         try {
             const observacionCreada: Observacion =
                 await prisma.observacion.create({
@@ -145,11 +151,12 @@ routerObservaciones.delete(
         const { id } = req.params;
 
         try {
-            const observacionBorrada: Observacion = await prisma.observacion.delete({
-                where: {
-                    id,
-                },
-            });
+            const observacionBorrada: Observacion =
+                await prisma.observacion.delete({
+                    where: {
+                        id,
+                    },
+                });
             res.json(observacionBorrada);
         } catch (error: any) {
             handleError(error as Error, res);
@@ -175,12 +182,13 @@ routerObservaciones.put(
         nuevaObservacion.id = id;
 
         try {
-            const observacionActualizada: Observacion = await prisma.observacion.update({
-                where: {
-                    id,
-                },
-                data: nuevaObservacion,
-            });
+            const observacionActualizada: Observacion =
+                await prisma.observacion.update({
+                    where: {
+                        id,
+                    },
+                    data: nuevaObservacion,
+                });
             res.json(observacionActualizada);
         } catch (error: any) {
             handleError(error as Error, res);
