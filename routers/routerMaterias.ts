@@ -2,16 +2,17 @@ import express, { Router, Request, Response } from "express";
 import { Equipo, Materia, PrismaClient } from "@prisma/client";
 import handleError from "../handle-errors";
 import validarAccesoAdministrador from "../controllers/validarAccesoAdmin";
+import validarAcceso from "../controllers/validarAcceso";
 
 const routerMaterias: Router = express.Router();
 const prisma = new PrismaClient();
 
 routerMaterias.get(
     "/",
-    validarAccesoAdministrador,
+    validarAcceso,
     async (req: Request, res: Response) => {
         try {
-            const materias: Equipo[] = await prisma.equipo.findMany();
+            const materias: Materia[] = await prisma.materia.findMany();
             res.json(materias);
         } catch (error: any) {
             handleError(error as Error, res);
