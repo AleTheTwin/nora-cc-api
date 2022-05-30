@@ -110,7 +110,7 @@ routerSolicitudes.post(
                         objetivo: nuevaSolicitud.objetivo,
                         solicitante: {
                             connect: {
-                                matricula: nuevaSolicitud.solicitanteId
+                                matricula: usuario.matricula
                             }
                         }
 
