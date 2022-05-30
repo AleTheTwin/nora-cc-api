@@ -76,6 +76,14 @@ routerUsuarios.post("/", validarAccesoAdministrador, async (req: Request, res: R
         return;
     }
 
+    if(!nuevoUsuario.nombre || !nuevoUsuario.password) {
+        res.json({
+            error: "Los campos nombre y password no pueden estar vacíos",
+            code: "P1001",
+        });
+        return;
+    }
+
     if (nuevoUsuario.nombre == "" || nuevoUsuario.password == "") {
         res.json({
             error: "Los campos nombre y password no pueden estar vacíos",
