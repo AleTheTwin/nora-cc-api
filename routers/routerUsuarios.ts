@@ -92,6 +92,7 @@ routerUsuarios.post("/", validarAccesoAdministrador, async (req: Request, res: R
         });
         return;
     }
+    console.log(nuevoUsuario.password);
     try {
         nuevoUsuario.password = await hashPassword(nuevoUsuario.password);
         const usuario: Usuario = await prisma.usuario.create({
