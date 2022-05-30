@@ -96,13 +96,23 @@ routerObservaciones.post(
         const usuario: Usuario = req.usuario;
         const { numeroInventario } = req.params;
         const ip = (req.headers["x-forwarded-for"]?.toString() || req.socket.remoteAddress!);
-        if (nuevaObservacion.contenido == "") {
-            res.json({
+        
+        if (!nuevaObservacion.contenido) {
+            res.status(500).json({
                 error: "El campo nombre no puede estar vacío.",
                 code: "P1001",
             });
             return;
         }
+        
+        if (nuevaObservacion.contenido == "") {
+            res.status(500).json({
+                error: "El campo nombre no puede estar vacío.",
+                code: "P1001",
+            });
+            return;
+        }
+        
         try {
             const observacionCreada: Observacion =
                 await prisma.observacion.create({

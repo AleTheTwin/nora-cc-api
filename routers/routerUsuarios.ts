@@ -67,9 +67,10 @@ routerUsuarios.post("/", validarAccesoAdministrador, async (req: Request, res: R
         nuevoUsuario.carrera != Carrera.LE &&
         nuevoUsuario.carrera != Carrera.LIS &&
         nuevoUsuario.carrera != Carrera.LRySC &&
+        nuevoUsuario.carrera != Carrera.NA &&
         nuevoUsuario.carrera != Carrera.LTC
     ) {
-        res.json({
+        res.status(500).json({
             error: "Carrera no válida",
             code: "P1002",
         });
@@ -77,7 +78,7 @@ routerUsuarios.post("/", validarAccesoAdministrador, async (req: Request, res: R
     }
 
     if(!nuevoUsuario.nombre || !nuevoUsuario.password) {
-        res.json({
+        res.status(500).json({
             error: "Los campos nombre y password no pueden estar vacíos",
             code: "P1001",
         });
@@ -154,7 +155,7 @@ routerUsuarios.put("/:matricula/", validarAccesoAdministrador, async (req: Reque
         nuevoUsuario.carrera != Carrera.LRySC &&
         nuevoUsuario.carrera != Carrera.LTC
     ) {
-        res.json({
+        res.status(500).json({
             error: "Carrera no válida",
             code: "P1002",
         });

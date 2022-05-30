@@ -47,8 +47,16 @@ routerMaterias.post(
     async (req: Request, res: Response) => {
         const nuevaMateria: Materia = req.body;
 
+        if (!nuevaMateria.nombre) {
+            res.status(500).json({
+                error: "El campo nombre no puede estar vacío.",
+                code: "P1001",
+            });
+            return;
+        }
+
         if (nuevaMateria.nombre == "") {
-            res.json({
+            res.status(500).json({
                 error: "El campo nombre no puede estar vacío.",
                 code: "P1001",
             });
@@ -90,6 +98,14 @@ routerMaterias.put(
     async (req: Request, res: Response) => {
         const { nrc } = req.params;
         const nuevaMateria: Materia = req.body;
+
+        if (!nuevaMateria.nombre) {
+            res.status(500).json({
+                error: "El campo nombre no puede estar vacío.",
+                code: "P1001",
+            });
+            return;
+        }
 
         if (nuevaMateria.nombre == "") {
             res.json({

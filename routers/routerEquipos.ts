@@ -46,8 +46,16 @@ routerEquipos.post(
     async (req: Request, res: Response) => {
         const nuevoEquipo: Equipo = req.body;
 
+        if(!nuevoEquipo.nombre) {
+            res.status(500).json({
+                error: "El campo nombre no puede estar vacío.",
+                code: "P1001",
+            });
+            return;
+        }
+
         if (nuevoEquipo.nombre == "") {
-            res.json({
+            res.status(500).json({
                 error: "El campo nombre no puede estar vacío.",
                 code: "P1001",
             });
@@ -90,8 +98,16 @@ routerEquipos.put(
         const { numeroInventario } = req.params;
         const nuevoEquipo: Equipo = req.body;
 
+        if(!nuevoEquipo.nombre) {
+            res.status(500).json({
+                error: "El campo nombre no puede estar vacío.",
+                code: "P1001",
+            });
+            return;
+        }
+
         if (nuevoEquipo.nombre == "") {
-            res.json({
+            res.status(500).json({
                 error: "El campo nombre no puede estar vacío.",
                 code: "P1001",
             });

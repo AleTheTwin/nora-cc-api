@@ -150,8 +150,16 @@ routerSolicitudes.put(
         const { id } = req.params;
         const nuevaObservacion: Observacion = req.body;
 
+        if (!nuevaObservacion.contenido) {
+            res.status(500).json({
+                error: "El campo contenido no puede estar vacío.",
+                code: "P1001",
+            });
+            return;
+        }
+
         if (nuevaObservacion.contenido == "") {
-            res.json({
+            res.status(500).json({
                 error: "El campo contenido no puede estar vacío.",
                 code: "P1001",
             });
