@@ -7,7 +7,7 @@ async function main() {
             solicitudes: true,
         },
     });
-    console.log(equipos);
+    console.log(JSON.stringify(equipos));
 }
 
 main();
