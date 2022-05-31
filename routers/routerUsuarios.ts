@@ -21,6 +21,57 @@ routerUsuarios.get(
     }
 );
 
+routerUsuarios.get(
+    "/profesores/",
+    validarAccesoAdministrador,
+    async (req: Request, res: Response) => {
+        try {
+            const usuarios: Usuario[] = await prisma.usuario.findMany({
+                where: {
+                    rol: Rol.profesor
+                }
+            });
+            res.json(usuarios);
+        } catch (error: any) {
+            handleError(error as Error, res);
+        }
+    }
+);
+
+routerUsuarios.get(
+    "/alumnos/",
+    validarAccesoAdministrador,
+    async (req: Request, res: Response) => {
+        try {
+            const usuarios: Usuario[] = await prisma.usuario.findMany({
+                where: {
+                    rol: Rol.alumno
+                }
+            });
+            res.json(usuarios);
+        } catch (error: any) {
+            handleError(error as Error, res);
+        }
+    }
+);
+
+routerUsuarios.get(
+    "/administradores/",
+    validarAccesoAdministrador,
+    async (req: Request, res: Response) => {
+        try {
+            const usuarios: Usuario[] = await prisma.usuario.findMany({
+                where: {
+                    rol: Rol.administrador
+                }
+            });
+            res.json(usuarios);
+        } catch (error: any) {
+            handleError(error as Error, res);
+        }
+    }
+);
+
 routerUsuarios.get("/:matricula/", validarAcceso, async (req: Request, res: Response) => {
     const { matricula } = req.params;
     const usuario: Usuario = req.usuario;
