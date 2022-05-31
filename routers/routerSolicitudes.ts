@@ -113,9 +113,9 @@ routerSolicitudes.post(
                 }
                 let resultados = equipo.solicitudes.map((solicitud: Solicitud) => {
                     return (
-                        nuevaSolicitud.horaEntrada >= solicitud.horaSalida ||
-                        (nuevaSolicitud.horaEntrada < solicitud.horaEntrada &&
-                            nuevaSolicitud.horaSalida <= solicitud.horaEntrada)
+                        moment(nuevaSolicitud.horaEntrada).isSameOrAfter(solicitud.horaSalida) ||
+                        (moment(nuevaSolicitud.horaEntrada).isBefore(solicitud.horaEntrada) &&
+                        moment(nuevaSolicitud.horaSalida).isSameOrBefore(solicitud.horaEntrada))
                     );
                 });
                 return !resultados.includes(false);
