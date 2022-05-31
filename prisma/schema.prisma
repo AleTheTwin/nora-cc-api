@@ -39,7 +39,7 @@ model Solicitud {
   horaEntrada   DateTime // Se manda
   creadoEn      DateTime
   objetivo      String // Se manda
-  equipoId      String @default("886dbac9-5951-4beb-9bc1-08dc586a7aa6")
+  equipoId      String   @default("886dbac9-5951-4beb-9bc1-08dc586a7aa6")
   equipo        Equipo   @relation(fields: [equipoId], references: [numeroInventario], onDelete: Cascade, onUpdate: Cascade)
   solicitante   Usuario  @relation(name: "Solicita", fields: [solicitanteId], references: [matricula], onDelete: Cascade, onUpdate: Cascade)
   solicitanteId String
@@ -58,7 +58,7 @@ model Observacion {
   autor     Usuario @relation(fields: [autorId], references: [matricula], onDelete: Cascade, onUpdate: Cascade)
   autorIp   String
   autorId   String
-  contenido String  @unique // Se manda
+  contenido String // Se manda
   equipo    Equipo  @relation(fields: [equipoId], references: [numeroInventario], onDelete: Cascade, onUpdate: Cascade)
   equipoId  String
 }
