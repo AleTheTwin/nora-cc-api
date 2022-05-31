@@ -205,6 +205,7 @@ routerUsuarios.put("/:matricula/", validarAccesoAdministrador, async (req: Reque
         nuevoUsuario.carrera != Carrera.LE &&
         nuevoUsuario.carrera != Carrera.LIS &&
         nuevoUsuario.carrera != Carrera.LRySC &&
+        nuevoUsuario.carrera != Carrera.NA &&
         nuevoUsuario.carrera != Carrera.LTC
     ) {
         res.status(500).json({
