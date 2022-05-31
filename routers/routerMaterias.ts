@@ -7,18 +7,27 @@ import validarAcceso from "../controllers/validarAcceso";
 const routerMaterias: Router = express.Router();
 const prisma = new PrismaClient();
 
-routerMaterias.get(
-    "/",
-    validarAcceso,
-    async (req: Request, res: Response) => {
-        try {
-            const materias: Materia[] = await prisma.materia.findMany();
-            res.json(materias);
-        } catch (error: any) {
-            handleError(error as Error, res);
-        }
+routerMaterias.get("/", validarAcceso, async (req: Request, res: Response) => {
+    try {
+        const materias: Materia[] = await prisma.materia.findMany();
+        res.json(materias);
+    } catch (error: any) {
+        handleError(error as Error, res);
     }
-);
+});
+
+routerMaterias.get("/full/", validarAcceso, async (req: Request, res: Response) => {
+    try {
+        const materias: Materia[] = await prisma.materia.findMany({
+            include: {
+                profesor: true,
+            },
+        });
+        res.json(materias);
+    } catch (error: any) {
+        handleError(error as Error, res);
+    }
+});
 
 routerMaterias.get("/:nrc/", async (req: Request, res: Response) => {
     const { nrc } = req.params;
