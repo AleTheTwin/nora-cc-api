@@ -1,13 +1,5 @@
 import express, { Router, Request, Response } from "express";
-import {
-    Carrera,
-    Equipo,
-    Materia,
-    Observacion,
-    PrismaClient,
-    Rol,
-    Usuario,
-} from "@prisma/client";
+import { Observacion, PrismaClient, Usuario } from "@prisma/client";
 import handleError from "../handle-errors";
 import validarAcceso from "../controllers/validarAcceso";
 import validarAccesoAdministrador from "../controllers/validarAccesoAdmin";
@@ -28,7 +20,7 @@ routerObservaciones.get(
                         equipoId: numeroInventario,
                     },
                 });
-                
+
             const hizoComentario =
                 observaciones.find(
                     (observacion) => observacion.autorId == usuario.matricula

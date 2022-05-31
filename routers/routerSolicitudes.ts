@@ -1,8 +1,6 @@
 import express, { Router, Request, Response } from "express";
 import moment from "moment";
 import {
-    Carrera,
-    Equipo,
     Materia,
     Observacion,
     Solicitud,

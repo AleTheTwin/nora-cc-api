@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from "express";
-import { Equipo, Materia, PrismaClient } from "@prisma/client";
+import { Materia, PrismaClient } from "@prisma/client";
 import handleError from "../handle-errors";
 import validarAccesoAdministrador from "../controllers/validarAccesoAdmin";
 import validarAcceso from "../controllers/validarAcceso";
