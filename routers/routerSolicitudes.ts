@@ -102,14 +102,14 @@ routerSolicitudes.post(
         const usuario: Usuario = req.usuario;
         const { numeroInventario } = req.params;
         try {
-            const equipos: Equipo[] = await prisma.equipo.findMany({
+            const equipos: any[] = await prisma.equipo.findMany({
                 include: {
                     solicitudes: true,
                 },
             });
 
             const equipoDisponible = equipos.find((equipo) => {
-                return equipo.solicitudes.find((solicitud) => {
+                return equipo.solicitudes.find((solicitud: Solicitud) => {
                     return (
                         solicitud.horaEntrada < nuevaSolicitud.horaSalida &&
                         solicitud.horaSalida > nuevaSolicitud.horaEntrada
