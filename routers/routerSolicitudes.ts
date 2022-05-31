@@ -28,10 +28,10 @@ routerSolicitudes.get(
         try {
             var solicitud: Solicitud | null = await prisma.solicitud.findFirst({
                 where: {
-                    id
-                }
+                    id,
+                },
             });
-            if(solicitud == null) {
+            if (solicitud == null) {
                 res.status(404).send({
                     error: `Solicitud con id ${id} no encontrada.`,
                     code: "R1001",
@@ -41,13 +41,14 @@ routerSolicitudes.get(
             if (usuario.rol == Rol.profesor) {
                 const materias: Materia[] = await prisma.materia.findMany({
                     where: {
-                        profesorId: usuario.matricula
-                    }
-                })
-                let materiaInSolicitud = materias.find(materia => {
-                    return materia.nrc == solicitud?.materiaNRC;
-                }) != undefined
-                if(!materiaInSolicitud) {
+                        profesorId: usuario.matricula,
+                    },
+                });
+                let materiaInSolicitud =
+                    materias.find((materia) => {
+                        return materia.nrc == solicitud?.materiaNRC;
+                    }) != undefined;
+                if (!materiaInSolicitud) {
                     res.status(401).send({
                         error: "No tienes acceso a este recurso",
                         code: "T1003",
@@ -68,18 +69,24 @@ routerSolicitudes.get(
     async (req: Request, res: Response) => {
         const usuario: Usuario = req.usuario;
         try {
-            var solicitudes: Solicitud[] = await prisma.solicitud.findMany();
+            var solicitudes: Solicitud[] = await prisma.solicitud.findMany({
+                orderBy: {
+                    horaSalida: "asc",
+                },
+            });
             if (usuario.rol == Rol.profesor) {
                 const materias: Materia[] = await prisma.materia.findMany({
                     where: {
-                        profesorId: usuario.matricula
-                    }
-                })
-                solicitudes = solicitudes.filter(solicitud => {
-                    return materias.find(materia => {
-                        return materia.nrc == solicitud.materiaNRC;
-                    }) != undefined
-                })
+                        profesorId: usuario.matricula,
+                    },
+                });
+                solicitudes = solicitudes.filter((solicitud) => {
+                    return (
+                        materias.find((materia) => {
+                            return materia.nrc == solicitud.materiaNRC;
+                        }) != undefined
+                    );
+                });
             }
             res.json(solicitudes);
         } catch (error: any) {
@@ -96,26 +103,24 @@ routerSolicitudes.post(
         const usuario: Usuario = req.usuario;
         const { numeroInventario } = req.params;
         try {
-            const solicitudCreada: Solicitud =
-                await prisma.solicitud.create({
-                    data: {
-                        creadoEn: moment().toISOString(),
-                        horaEntrada: nuevaSolicitud.horaEntrada,
-                        horaSalida: nuevaSolicitud.horaSalida,
-                        materia: {
-                            connect: {
-                                nrc: nuevaSolicitud.materiaNRC
-                            }
+            const solicitudCreada: Solicitud = await prisma.solicitud.create({
+                data: {
+                    creadoEn: moment().toISOString(),
+                    horaEntrada: nuevaSolicitud.horaEntrada,
+                    horaSalida: nuevaSolicitud.horaSalida,
+                    materia: {
+                        connect: {
+                            nrc: nuevaSolicitud.materiaNRC,
                         },
-                        objetivo: nuevaSolicitud.objetivo,
-                        solicitante: {
-                            connect: {
-                                matricula: usuario.matricula
-                            }
-                        }
-
                     },
-                });
+                    objetivo: nuevaSolicitud.objetivo,
+                    solicitante: {
+                        connect: {
+                            matricula: usuario.matricula,
+                        },
+                    },
+                },
+            });
             res.json(solicitudCreada);
         } catch (error: any) {
             handleError(error as Error, res);
@@ -130,12 +135,11 @@ routerSolicitudes.delete(
         const { id } = req.params;
 
         try {
-            const solicitudBorrada: Solicitud =
-                await prisma.solicitud.delete({
-                    where: {
-                        id,
-                    },
-                });
+            const solicitudBorrada: Solicitud = await prisma.solicitud.delete({
+                where: {
+                    id,
+                },
+            });
             res.json(solicitudBorrada);
         } catch (error: any) {
             handleError(error as Error, res);
