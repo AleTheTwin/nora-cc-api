@@ -100,7 +100,6 @@ routerSolicitudes.post(
     async (req: Request, res: Response) => {
         const nuevaSolicitud: Solicitud = req.body;
         const usuario: Usuario = req.usuario;
-        const { numeroInventario } = req.params;
         try {
             const equipos: any[] = await prisma.equipo.findMany({
                 include: {
@@ -108,14 +107,27 @@ routerSolicitudes.post(
                 },
             });
 
-            const equipoDisponible = equipos.find((equipo) => {
-                return equipo.solicitudes.find((solicitud: Solicitud) => {
+            let equipoDisponible = equipos.find((equipo) => {
+                if(equipo.solicitudes.length == 0) {
+                    return true;
+                }
+                let resultados = equipo.solicitudes.map((solicitud: Solicitud) => {
                     return (
-                        solicitud.horaEntrada < nuevaSolicitud.horaSalida &&
-                        solicitud.horaSalida > nuevaSolicitud.horaEntrada
+                        nuevaSolicitud.horaEntrada >= solicitud.horaSalida ||
+                        (nuevaSolicitud.horaEntrada < solicitud.horaEntrada &&
+                            nuevaSolicitud.horaSalida <= solicitud.horaEntrada)
                     );
-                }) != undefined;
+                });
+                return !resultados.includes(false);
             });
+
+            if(equipoDisponible == undefined) {
+                res.status(500).send({
+                    error: "No hay equipos disponibles en el horario solicitado",
+                    code: "R1003",
+                });
+                return;
+            }
 
             const solicitudCreada: Solicitud = await prisma.solicitud.create({
                 data: {
