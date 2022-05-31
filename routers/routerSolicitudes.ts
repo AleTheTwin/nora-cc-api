@@ -7,6 +7,7 @@ import {
     PrismaClient,
     Rol,
     Usuario,
+    Equipo,
 } from "@prisma/client";
 import handleError from "../handle-errors";
 import validarAcceso from "../controllers/validarAcceso";
@@ -101,6 +102,21 @@ routerSolicitudes.post(
         const usuario: Usuario = req.usuario;
         const { numeroInventario } = req.params;
         try {
+            const equipos: Equipo[] = await prisma.equipo.findMany({
+                include: {
+                    solicitudes: true,
+                },
+            });
+
+            const equipoDisponible = equipos.find((equipo) => {
+                return equipo.solicitudes.find((solicitud) => {
+                    return (
+                        solicitud.horaEntrada < nuevaSolicitud.horaSalida &&
+                        solicitud.horaSalida > nuevaSolicitud.horaEntrada
+                    );
+                }) != undefined;
+            });
+
             const solicitudCreada: Solicitud = await prisma.solicitud.create({
                 data: {
                     creadoEn: moment().toISOString(),
@@ -117,8 +133,14 @@ routerSolicitudes.post(
                             matricula: usuario.matricula,
                         },
                     },
+                    equipo: {
+                        connect: {
+                            numeroInventario: equipoDisponible?.numeroInventario
+                        }
+                    }
                 },
             });
+
             res.json(solicitudCreada);
         } catch (error: any) {
             handleError(error as Error, res);
