@@ -28,14 +28,11 @@ routerObservaciones.get(
                         equipoId: numeroInventario,
                     },
                 });
-            const observaciones2: Observacion[] =
-                await prisma.observacion.findMany({
-                    where: {
-                        equipoId: numeroInventario,
-                        autorId: usuario.matricula,
-                    },
-                });
-            const hizoComentario = observaciones2.length > 0;
+                
+            const hizoComentario =
+                observaciones.find(
+                    (observacion) => observacion.autorId == usuario.matricula
+                ) != undefined;
 
             if (!hizoComentario) {
                 res.status(401).send({
