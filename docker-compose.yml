@@ -6,8 +6,6 @@ services:
         restart: always
         environment:
             - MARIADB_ROOT_PASSWORD=root
-            - MARIADB_USER=root
-            - MARIADB_PASSWORD=root
             - MARIADB_DATABASE=mydb
         volumes:
             - ./db:/var/lib/mysql/
