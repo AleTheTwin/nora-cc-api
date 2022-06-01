@@ -50,34 +50,34 @@ export default async function validarAccesoAlumno(
             });
             return;
         }
+        const matricula = payload.subscriber;
+        const usuario: Usuario | null = await prisma.usuario.findUnique({
+            where: {
+                matricula,
+            },
+        });
+        
+        if (usuario == null) {
+            res.status(401).send({
+                error: "No tienes acceso a este recurso",
+                code: "T1003",
+            });
+            return;
+        }
+    
+        if (!(usuario.rol == Rol.alumno || usuario.rol == Rol.administrador)) {
+            res.status(401).send({
+                error: "No tienes acceso a este recurso",
+                code: "T1003",
+            });
+            return;
+        }
+    
+        req.usuario = usuario;
+        console.log(`Request received from ${req.usuario.nombre}`);
+        next();
     } catch (err) {
         handleError(err as Error, res);
     }
-
-    const matricula = payload.subscriber;
-    const usuario: Usuario | null = await prisma.usuario.findUnique({
-        where: {
-            matricula,
-        },
-    });
-    
-    if (usuario == null) {
-        res.status(401).send({
-            error: "No tienes acceso a este recurso",
-            code: "T1003",
-        });
-        return;
-    }
-
-    if (!(usuario.rol == Rol.alumno || usuario.rol == Rol.administrador)) {
-        res.status(401).send({
-            error: "No tienes acceso a este recurso",
-            code: "T1003",
-        });
-        return;
-    }
-
-    req.usuario = usuario;
-    console.log(`Request received from ${req.usuario.nombre}`);
-    next();
 }
+

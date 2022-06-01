@@ -103,7 +103,13 @@ routerSolicitudes.post(
         try {
             const equipos: any[] = await prisma.equipo.findMany({
                 include: {
-                    solicitudes: true,
+                    solicitudes: {
+                        where: {
+                            horaSalida: {
+                                lt: moment().toISOString(),
+                            }
+                        }
+                    },
                 },
             });
 
