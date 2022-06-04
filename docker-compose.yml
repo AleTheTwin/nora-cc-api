@@ -1,5 +1,4 @@
-
-version: '3.3'
+version: "3.3"
 services:
     db:
         image: mariadb
@@ -8,7 +7,7 @@ services:
             - MARIADB_ROOT_PASSWORD=root
             - MARIADB_DATABASE=mydb
         volumes:
-            - ./db:/var/lib/mysql/
+            - bd:/var/lib/mysql/
         ports:
             - 3306:3306
     api:
@@ -26,4 +25,5 @@ services:
             - DB_HOST=db
         depends_on:
             - db
-
+volumes:
+    bd:

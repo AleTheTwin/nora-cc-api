@@ -118,7 +118,7 @@ function main() {
             data: {
                 matricula: 'zs00000000',
                 nombre: '$ADMIN_NOMBRE',
-                carrera: 'LTC',
+                carrera: 'NA',
                 password: yield (0, hashPassword_1.default)('$ADMIN_PASSWORD'),
                 rol: 'administrador',
             },
@@ -141,35 +141,6 @@ printf "${reset}\n"
 
 printf "${cyan}Dando de baja el servicio de base de datos...\n"
 docker-compose down
-echo "
-version: '3.3'
-services:
-    db:
-        image: mariadb
-        restart: always
-        environment:
-            - MARIADB_ROOT_PASSWORD=root
-            - MARIADB_USER=${DB_USER}
-            - MARIADB_PASSWORD=${DB_PASSWORD}
-            - MARIADB_DATABASE=mydb
-        volumes:
-            - ./db:/var/lib/mysql/
-    api:
-        image: node:16
-        volumes:
-            - ./:/home/node/app
-        user: node
-        working_dir: /home/node/app/
-        command: "'"'npm start'"'"
-        links:
-            - db
-        ports:
-            - ${PORT}:8080
-        environment:
-            - DB_HOST=db
-        depends_on:
-            - db
-" > docker-compose.yml
 printf "${reset}\n"
 printf "${green}Instalación completa"
 
